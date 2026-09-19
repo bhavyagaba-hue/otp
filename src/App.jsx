@@ -34,6 +34,25 @@ const App = () => {
     }
   }
 
+  function handlePaste(e) {
+    // console.log(e);
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData("text");
+    const digits = pastedText.replace(/[^0-9]/g, "").slice(0, 4);
+
+    if (digits.length === 0) return;
+    const digitArray = digits.split("");
+
+    setOtp1(digitArray[0] || "");
+    setOtp2(digitArray[1] || "");
+    setOtp3(digitArray[2] || "");
+    setOtp4(digitArray[3] || "");
+
+    const refs = [input1, input2, input3, input4];
+    const nextIndex = digitArray.length < 4 ? digitArray.length : 3;
+    refs[nextIndex].current.focus();
+  }
+
   return (
     <div className="container">
       <h1> Verify with OTP</h1>
@@ -54,6 +73,7 @@ const App = () => {
               input2.current.focus();
             }
           }}
+          onPaste={handlePaste}
         />
         <input
           ref={input2}
@@ -68,6 +88,7 @@ const App = () => {
             }
           }}
           onKeyDown={handleBackspace2}
+          onPaste={handlePaste}
         />
         <input
           ref={input3}
@@ -82,6 +103,7 @@ const App = () => {
             }
           }}
           onKeyDown={handleBackspace3}
+          onPaste={handlePaste}
         />
         <input
           ref={input4}
@@ -91,6 +113,7 @@ const App = () => {
           value={otp4}
           onChange={(e) => setOtp4(e.target.value)}
           onKeyDown={handleBackspace4}
+          onPaste={handlePaste}
         />
       </div>
 
